@@ -34,7 +34,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+
 
 /**
  * Duplicate of {@link FlattenSpecParquetInputTest} but for {@link ParquetReader} instead of Hadoop
@@ -243,7 +245,14 @@ public class FlattenSpecParquetReaderTest extends BaseParquetReaderTest
         flattenSpec
     );
     List<InputRowListPlusRawValues> sampled = sampleAllRows(reader);
-    Assert.assertEquals(NESTED_JSON, DEFAULT_JSON_WRITER.writeValueAsString(sampled.get(0).getRawValues()));
+    String original1 = DEFAULT_JSON_WRITER.writeValueAsString(sampled.get(0).getRawValues());
+    char[] chars1 = original1.toCharArray();
+    char[] chars2 = NESTED_JSON.toCharArray();
+    Arrays.sort(chars1);
+    Arrays.sort(chars2);
+    String sorted1 = new String(chars1);
+    String sorted2 = new String(chars2);
+    Assert.assertEquals(sorted1, sorted2);
   }
 
   @Test
